@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workshop: Xây Dựng Tuyên Bố Triết Lý & Chiến Lược Total Rewards</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Oswald & Noto Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Noto+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Chart.js for visualization -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+
+
+    <style>
+        body {
+            font-family: 'Noto Sans', sans-serif;
+            background-color: #f0f2f5;
+            color: #1a237e;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Oswald', sans-serif;
+        }
+        .workshop-container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 2rem;
+        }
+        .step-card {
+            background-color: white;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            margin-bottom: 2rem;
+            border: 1px solid #e2e8f0;
+        }
+        .step-card h2 {
+            color: #1a237e;
+            border-bottom: 3px solid #FF9800;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+        label {
+            font-weight: 500;
+            color: #5C6BC0;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 1rem;
+        }
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #5C6BC0;
+            box-shadow: 0 0 0 3px rgba(92, 107, 192, 0.2);
+        }
+        .analysis-box {
+            background-color: #f1f5f9;
+            border-left: 5px solid #5C6BC0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+            color: #334155;
+        }
+        .analysis-box h4 { color: #1a237e; }
+        .data-point {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #009688;
+            color: white;
+            font-family: 'Oswald', sans-serif;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-size: 1.25rem;
+            text-transform: uppercase;
+            transition: background-color 0.3s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-primary:hover {
+            background-color: #00796b;
+            transform: translateY(-2px);
+        }
+         .btn-secondary {
+            background-color: #5C6BC0;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #3f51b5;
+        }
+        #final-statement {
+            background-color: #e3f2fd;
+            border: 2px solid #5C6BC0;
+            border-radius: 1rem;
+            padding: 2.5rem;
+            margin-top: 2rem;
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+        .choice-card {
+            border: 2px solid #cbd5e1;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            transition: border-color 0.3s, box-shadow 0.3s, transform 0.2s;
+            position: relative;
+        }
+        .choice-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .choice-card.selected {
+            border-color: #009688;
+            box-shadow: 0 0 0 3px rgba(0, 150, 136, 0.3);
+        }
+        .choice-card h4 { color: #1a237e; }
+        .choice-card p { font-size: 0.9rem; color: #475569; }
+        
+        .btn-copy {
+            background-color: #5C6BC0;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-copy:hover {
+            background-color: #3f51b5;
+        }
+        
+        #philosophy-draft-output {
+            background-color: #f1f5f9;
+            border: 1px dashed #94a3b8;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            font-style: italic;
+            color: #1e293b;
+        }
+        .choice-summary {
+            background-color: #e8f5e9;
+            border-left: 5px solid #009688;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            font-size: 1rem;
+        }
+        .demo-case-study {
+            background-color: #fffbeb;
+            border-left: 5px solid #f59e0b;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+        }
+        .demo-case-study h4 { color: #b45309; }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            background-color: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+        .checkbox-label input {
+            margin-right: 0.75rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        th, td {
+            border: 1px solid #e2e8f0;
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: #f8fafc;
+            font-weight: bold;
+        }
+        .highlight-red {
+            background-color: #fee2e2;
+            color: #991b1b;
+        }
+        .highlight-green {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="workshop-container">
+        <!-- Header -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold text-indigo-900">WORKSHOP THỰC HÀNH</h1>
+            <p class="text-2xl mt-2 text-gray-600">Xây Dựng Tuyên Bố Triết Lý & Chiến Lược Total Rewards</p>
+        </div>
+
+        <!-- Step 1: Context -->
+        <div class="step-card">
+            <h2 class="text-3xl"><i class="fas fa-building mr-3 text-orange-500"></i>BƯỚC 1: BỐI CẢNH DOANH NGHIỆP</h2>
+            <p class="mb-4">Bạn là Giám đốc Nhân sự (CHRO) của <strong>NextGen Innovations Inc.</strong>. Hãy phân tích các thông tin dưới đây để đưa ra quyết định chiến lược.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Left Column -->
+                <div class="space-y-6">
+                    <div class="bg-indigo-50 border border-indigo-200 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold text-indigo-800 mb-2"><i class="fas fa-bullseye mr-2"></i>Chiến Lược Kinh Doanh</h4>
+                        <p>"Trở thành công ty số 1 thị trường về giải pháp AI... bằng cách <strong>đổi mới nhanh hơn bất kỳ ai</strong>."</p>
+                    </div>
+                    <div class="bg-indigo-50 border border-indigo-200 p-6 rounded-lg">
+                        <h4 class="text-xl font-bold text-indigo-800 mb-2"><i class="fas fa-users mr-2"></i>Văn Hóa Doanh Nghiệp</h4>
+                        <p>"Nhịp độ nhanh, hướng đến kết quả... mọi người đều phải <strong>hành động như một người chủ</strong>."</p>
+                    </div>
+                </div>
+                
+                <!-- Right Column - Data -->
+                <div class="bg-red-50 border border-red-200 p-6 rounded-lg">
+                     <h4 class="text-xl font-bold text-red-800 mb-4"><i class="fas fa-chart-bar mr-2"></i>Dữ Liệu & Số Liệu Nội Bộ (Năm qua)</h4>
+                     <div class="space-y-4">
+                        <div class="flex items-start">
+                            <i class="fas fa-user-minus text-red-500 text-2xl w-8"></i>
+                            <div>
+                                <h5 class="font-bold">Tỷ lệ nghỉ việc (Khối Công nghệ):</h5>
+                                <p class="text-2xl font-bold text-red-600">25% <span class="text-sm font-normal text-gray-600">(so với 12% toàn công ty)</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-handshake-slash text-red-500 text-2xl w-8"></i>
+                            <div>
+                                <h5 class="font-bold">Tỷ lệ chấp nhận offer (Vị trí AI):</h5>
+                                <p class="text-2xl font-bold text-red-600">40% <span class="text-sm font-normal text-gray-600">(so với 75% các vị trí khác)</span></p>
+                            </div>
+                        </div>
+                        <div class="flex items-start">
+                            <i class="fas fa-comment-dots text-red-500 text-2xl w-8"></i>
+                            <div>
+                                <h5 class="font-bold">Phản hồi từ phỏng vấn nghỉ việc:</h5>
+                                <p class="italic text-red-700">"Lương cơ bản không cạnh tranh", "Muốn được chia sẻ thành quả dài hạn của công ty (cổ phiếu)".</p>
+                            </div>
+                        </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Philosophy Statement -->
+        <div class="step-card">
+            <h2 class="text-3xl"><i class="fas fa-scroll mr-3 text-orange-500"></i>BƯỚC 2: ĐỊNH HÌNH TRIẾT LÝ ĐÃI NGỘ</h2>
+            <p class="mb-6">Dựa trên bối cảnh, hãy trả lời 3 câu hỏi cốt lõi sau để xây dựng triết lý cho NextGen.</p>
+            
+            <div class="space-y-6">
+                <div>
+                    <label for="q1-identity">1. Chúng ta muốn được biết đến như thế nào trên thị trường nhân tài?</label>
+                    <textarea id="q1-identity" rows="2" placeholder="Ví dụ: là nơi đãi ngộ dựa trên sự tác động và đổi mới..."></textarea>
+                </div>
+                <div>
+                    <label for="q2-behaviors">2. Chúng ta sẽ đặc biệt ghi nhận và tưởng thưởng cho những hành vi & kết quả nào?</label>
+                    <textarea id="q2-behaviors" rows="2" placeholder="Ví dụ: những kết quả đột phá, tinh thần làm chủ..."></textarea>
+                </div>
+                <div>
+                    <label for="q3-strategy">3. Bằng cách đó, hệ thống đãi ngộ sẽ trực tiếp giúp công ty đạt được mục tiêu gì?</label>
+                    <textarea id="q3-strategy" rows="2" placeholder="Ví dụ: để thu hút và giữ chân những bộ óc sáng tạo nhất..."></textarea>
+                </div>
+            </div>
+            
+            <div class="text-center mt-8">
+                 <button id="synthesize-btn" class="btn-primary btn-secondary">
+                    <i class="fas fa-wand-magic-sparkles mr-2"></i>Tổng hợp & Xem bản nháp Triết lý
+                </button>
+            </div>
+
+            <div id="philosophy-draft-output" class="hidden">
+                <h4 class="font-bold text-indigo-800">Bản nháp Tuyên bố Triết lý:</h4>
+                <p id="philosophy-draft-text" class="mt-2"></p>
+            </div>
+        </div>
+
+        <!-- Step 3: Strategic Principles -->
+        <div class="step-card">
+            <h2 class="text-3xl"><i class="fas fa-cogs mr-3 text-orange-500"></i>BƯỚC 3: XÁC LẬP CÁC NGUYÊN TẮC CHIẾN LƯỢC</h2>
+            <p class="mb-6">Bây giờ, hãy biến triết lý thành các quyết định chiến lược cụ thể thông qua quy trình: <strong>Phân Tích -> Lựa Chọn -> Demo -> Kết Quả.</strong></p>
+
+            <!-- 3.1 Market Positioning -->
+            <div class="mb-8 border-t pt-6">
+                <h4 class="text-2xl font-bold mb-3"><i class="fas fa-chart-line mr-2 text-teal-600"></i>3.1. Định vị thị trường</h4>
+                <div class="analysis-box">
+                    <h4 class="text-xl font-bold mb-2">Phân Tích Dữ Liệu</h4>
+                    <ul class="list-disc list-inside">
+                        <li>Với <span class="data-point">tỷ lệ nghỉ việc khối AI là 25%</span> và <span class="data-point">tỷ lệ chấp nhận offer chỉ 40%</span>, rõ ràng chiến lược đãi ngộ hiện tại không đủ sức cạnh tranh.</li>
+                        <li>Để thu hút nhân tài từ các tập đoàn lớn, NextGen không thể "chơi an toàn". Cần một tuyên bố mạnh mẽ trên thị trường.</li>
+                    </ul>
+                </div>
+
+                <!-- NEW SECTION: Market Salary Analysis -->
+                <div class="demo-case-study">
+                    <h4 class="text-xl font-bold mb-2"><i class="fas fa-search-dollar mr-2"></i>Minh Họa Phân Tích Lương Thị Trường</h4>
+                    <p class="mb-2">Dưới đây là dữ liệu khảo sát lương (giả định) cho vị trí <strong>Kỹ sư AI Cao cấp</strong> (Tổng thu nhập mục tiêu hằng năm):</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Mức Bách Phân Vị</th>
+                                <th>Lương Thị Trường</th>
+                                <th>Định vị của Đối thủ (BigTech Corp.)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>P25 (Thấp)</td>
+                                <td>$120,000</td>
+                                <td></td>
+                            </tr>
+                            <tr class="highlight-red">
+                                <td><strong>Định vị Hiện tại của NextGen</strong></td>
+                                <td><strong>~$130,000</strong></td>
+                                <td><i class="fas fa-arrow-left mr-2"></i>Đang ở khoảng P25 - P50</td>
+                            </tr>
+                            <tr>
+                                <td>P50 (Trung bình)</td>
+                                <td>$150,000</td>
+                                <td></td>
+                            </tr>
+                            <tr class="highlight-green">
+                                <td>P75 (Cao)</td>
+                                <td><strong>$180,000</strong></td>
+                                <td><i class="fas fa-arrow-left mr-2"></i>Thường trả ở mức này hoặc cao hơn</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <p class="mt-4"><strong>Kết luận:</strong> Dữ liệu cho thấy lương hiện tại của NextGen thấp hơn đáng kể so với đối thủ cạnh tranh trực tiếp. Điều này **trực tiếp giải thích** tại sao tỷ lệ nghỉ việc cao và tỷ lệ chấp nhận offer thấp.</p>
+                </div>
+                
+                <p class="mb-4 mt-6"><strong>Lựa chọn của bạn:</strong> Dựa trên tất cả phân tích, bạn sẽ chọn chiến lược nào?</p>
+                <div id="market-position-choices" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="choice-card" data-choice="Lag" data-value="Lag the Market (Theo sau thị trường ở P25)">
+                        <h4><i class="fas fa-angle-double-down mr-2"></i>Theo Sau Thị Trường</h4>
+                        <p>Trả lương thấp hơn mức trung bình (P25). Rủi ro cao sẽ làm trầm trọng thêm các số liệu tiêu cực hiện tại.</p>
+                    </div>
+                    <div class="choice-card" data-choice="Match" data-value="Match the Market (Ngang bằng thị trường ở P50)">
+                        <h4><i class="fas fa-equals mr-2"></i>Ngang Bằng Thị Trường</h4>
+                        <p>Trả lương ở mức trung bình của thị trường (P50). An toàn, nhưng có thể không đủ để đảo ngược tình thế.</p>
+                    </div>
+                    <div class="choice-card" data-choice="Lead" data-value="Lead the Market (Dẫn đầu thị trường ở P75)">
+                        <h4><i class="fas fa-angle-double-up mr-2"></i>Dẫn Đầu Thị Trường</h4>
+                        <p>Trả lương cao hơn mức trung bình (P75). Đây là một khoản đầu tư chiến lược để giải quyết trực tiếp vấn đề nhân tài.</p>
+                    </div>
+                </div>
+                <div id="market-position-summary" class="choice-summary hidden"></div>
+            </div>
+
+            <!-- 3.2 Pay Mix -->
+            <div class="mb-8 border-t pt-6">
+                <h4 class="text-2xl font-bold mb-3"><i class="fas fa-chart-pie mr-2 text-teal-600"></i>3.2. Cấu trúc đãi ngộ (Pay Mix)</h4>
+                <div class="analysis-box">
+                    <h4 class="text-xl font-bold mb-2">Phân Tích Dữ Liệu</h4>
+                    <ul class="list-disc list-inside">
+                        <li>Văn hóa cần người <span class="data-point">"hành động như người chủ"</span>.</li>
+                        <li>Phỏng vấn nghỉ việc chỉ ra mong muốn được <span class="data-point">"chia sẻ thành quả dài hạn (cổ phiếu)"</span>.</li>
+                         <li>Điều này cho thấy nhân viên không chỉ muốn lương cố định cao, mà còn muốn gắn kết và hưởng lợi từ sự thành công của công ty.</li>
+                    </ul>
+                </div>
+                <p class="mb-4"><strong>Lựa chọn của bạn:</strong> Cấu trúc nào phản ánh tốt nhất văn hóa và dữ liệu phản hồi từ nhân viên?</p>
+                <div id="pay-mix-choices" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="choice-card" data-choice="Stable" data-desc="85% Cố định, 10% Thưởng, 5% Cổ phiếu">
+                        <h4>Thiên về Ổn định</h4>
+                        <p>Tỷ trọng cổ phiếu thấp, không đáp ứng được mong muốn từ phỏng vấn nghỉ việc.</p>
+                    </div>
+                    <div class="choice-card" data-choice="Balanced" data-desc="60% Cố định, 25% Thưởng, 15% Cổ phiếu">
+                        <h4>Cân bằng & Hiệu suất</h4>
+                        <p>Tỷ trọng thưởng và cổ phiếu (LTI) cao, trực tiếp thúc đẩy kết quả và tư duy làm chủ.</p>
+                    </div>
+                    <div class="choice-card" data-choice="Aggressive" data-desc="40% Cố định, 60% Thưởng, 0% Cổ phiếu">
+                        <h4>Tập trung vào "Săn bắn"</h4>
+                        <p>Không có đãi ngộ dài hạn (cổ phiếu), bỏ qua một phản hồi quan trọng từ nhân viên.</p>
+                    </div>
+                </div>
+                <div id="pay-mix-summary" class="choice-summary hidden"></div>
+                
+                 <!-- MINH HỌA THỰC TẾ -->
+                 <div id="pay-mix-visualization" class="demo-case-study hidden mt-6">
+                    <h4 class="text-xl font-bold mb-4">Minh Họa Thực Tế: Cấu Trúc Đãi Ngộ Theo Vị Trí</h4>
+                    <p class="mb-4">Dựa trên lựa chọn <strong>"Cân bằng & Hiệu suất"</strong>, đây là cách cấu trúc đãi ngộ có thể được điều chỉnh cho các vai trò khác nhau tại NextGen:</p>
+                    <canvas id="payMixChart"></canvas>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4 text-sm">
+                        <div class="bg-gray-100 p-3 rounded">
+                            <h5 class="font-bold">Kỹ sư AI Cao cấp</h5>
+                            <p>Tỷ trọng thưởng và cổ phiếu cao để khuyến khích đổi mới và giữ chân dài hạn.</p>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded">
+                            <h5 class="font-bold">Nhân viên Kinh doanh</h5>
+                            <p>Tỷ trọng thưởng (hoa hồng) rất cao để thúc đẩy doanh số, nhưng vẫn có cổ phiếu để gắn kết.</p>
+                        </div>
+                        <div class="bg-gray-100 p-3 rounded">
+                            <h5 class="font-bold">Nhân viên Hành chính</h5>
+                            <p>Tỷ trọng lương cố định cao nhất để đảm bảo sự ổn định cho vai trò hỗ trợ.</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- 3.3 Pay for Performance -->
+            <div class="border-t pt-6">
+                <h4 class="text-2xl font-bold mb-3"><i class="fas fa-star mr-2 text-teal-600"></i>3.3. Trả lương theo hiệu suất (Pay for Performance)</h4>
+                <div class="analysis-box">
+                    <h4 class="text-xl font-bold mb-2">Phân Tích Dữ Liệu</h4>
+                     <p>Để đạt mục tiêu <span class="data-point">"đổi mới nhanh hơn bất kỳ ai"</span> và củng cố văn hóa <span class="data-point">"hành động như người chủ"</span>, hệ thống thưởng phải tập trung vào các kết quả và hành vi cụ thể nào?</p>
+                </div>
+                <p class="mb-4"><strong>Lựa chọn của bạn:</strong> Đánh dấu vào những yếu tố quan trọng nhất mà hệ thống thưởng của NextGen sẽ tập trung vào.</p>
+                <div id="p4p-choices" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <label class="checkbox-label"><input type="checkbox" value="Kết quả đổi mới và ra mắt sản phẩm thành công">Kết quả đổi mới và ra mắt sản phẩm thành công</label>
+                    <label class="checkbox-label"><input type="checkbox" value="Đạt được mục tiêu kinh doanh của cá nhân và nhóm">Đạt được mục tiêu kinh doanh của cá nhân và nhóm</label>
+                    <label class="checkbox-label"><input type="checkbox" value="Thể hiện tinh thần hợp tác và hỗ trợ đồng đội">Thể hiện tinh thần hợp tác và hỗ trợ đồng đội</label>
+                    <label class="checkbox-label"><input type="checkbox" value="Kết quả chung của toàn công ty (chia sẻ lợi nhuận)">Kết quả chung của toàn công ty (chia sẻ lợi nhuận)</label>
+                </div>
+                <div id="p4p-demo-container" class="hidden mt-4">
+                    <div class="demo-case-study">
+                        <h4 class="text-xl font-bold mb-2">Demo Case Study: Tính Thưởng Cho "Dự Án Phoenix"</h4>
+                        <p>Quỹ thưởng dự án là <strong>$50,000</strong>. Do công ty và team đều vượt mục tiêu, quỹ thưởng được nhân hệ số và tăng lên <strong>$65,000</strong>.</p>
+                        <ul class="list-disc list-inside mt-2">
+                            <li>An (hoàn thành xuất sắc) nhận được <strong>150%</strong> phần thưởng của mình, tương đương <strong>$22,500</strong>.</li>
+                             <li>Bình (hoàn thành tốt) nhận được <strong>100%</strong> phần thưởng của mình, tương đương <strong>$15,000</strong>.</li>
+                        </ul>
+                        <p class="mt-2">Hệ thống P4P này cho thấy rõ sự khác biệt trong kết quả và đóng góp được ghi nhận xứng đáng.</p>
+                    </div>
+                </div>
+                <div id="p4p-summary" class="choice-summary hidden"></div>
+            </div>
+        </div>
+        
+        <!-- Generate Button -->
+        <div class="text-center my-12">
+            <button id="generate-btn" class="btn-primary">
+                <i class="fas fa-file-invoice-dollar mr-3"></i>Tạo Tuyên Bố Chính Thức
+            </button>
+        </div>
+
+        <!-- Final Statement Output -->
+        <div id="final-statement" class="hidden">
+            <div class="flex justify-between items-start">
+                 <div>
+                    <h2 class="text-3xl text-indigo-900">Bản Tuyên Bố Triết Lý & Chiến Lược Total Rewards</h2>
+                    <h3 class="text-2xl text-gray-600 mb-6">Công ty: NextGen Innovations Inc.</h3>
+                 </div>
+                 <button id="copy-btn" class="btn-copy"><i class="fas fa-copy mr-2"></i>Sao chép</button>
+            </div>
+            
+            <div id="output-content" class="space-y-6 text-lg">
+                <!-- Content will be generated here by JS -->
+            </div>
+        </div>
+
+    </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // --- Chart.js Global Registration ---
+    Chart.register(ChartDataLabels);
+
+    // --- Element Selection ---
+    const q1Identity = document.getElementById('q1-identity');
+    const q2Behaviors = document.getElementById('q2-behaviors');
+    const q3Strategy = document.getElementById('q3-strategy');
+    const synthesizeBtn = document.getElementById('synthesize-btn');
+    const philosophyDraftOutput = document.getElementById('philosophy-draft-output');
+    const philosophyDraftText = document.getElementById('philosophy-draft-text');
+    
+    // Step 3 Elements
+    const marketPositionChoices = document.getElementById('market-position-choices');
+    const marketPositionDemoContainer = document.getElementById('market-position-demo-container');
+    const marketPositionSummary = document.getElementById('market-position-summary');
+    
+    const payMixChoices = document.getElementById('pay-mix-choices');
+    const payMixSummary = document.getElementById('pay-mix-summary');
+    const payMixVisualization = document.getElementById('pay-mix-visualization');
+
+    const p4pChoices = document.getElementById('p4p-choices');
+    const p4pDemoContainer = document.getElementById('p4p-demo-container');
+    const p4pSummary = document.getElementById('p4p-summary');
+
+    const generateBtn = document.getElementById('generate-btn');
+    const finalStatementDiv = document.getElementById('final-statement');
+    const outputContentDiv = document.getElementById('output-content');
+    const copyBtn = document.getElementById('copy-btn');
+
+    // --- State Variables ---
+    let selectedMarketPosition = '';
+    let selectedPayMix = '';
+    let selectedP4p = [];
+    let payMixChartInstance = null;
+
+    // --- Event Listeners ---
+    synthesizeBtn.addEventListener('click', synthesizePhilosophy);
+    
+    // Step 3 Listeners
+    marketPositionChoices.addEventListener('click', (e) => {
+        const card = e.target.closest('.choice-card');
+        if (!card) return;
+        
+        marketPositionChoices.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        
+        selectedMarketPosition = card.dataset.value;
+        
+        // This logic is now part of the HTML structure, this just confirms the choice
+        marketPositionSummary.innerHTML = `<strong>Lựa chọn của bạn:</strong> ${selectedMarketPosition}.`;
+        marketPositionSummary.classList.remove('hidden');
+    });
+
+    payMixChoices.addEventListener('click', (e) => {
+        const card = e.target.closest('.choice-card');
+        if (!card) return;
+        payMixChoices.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+        selectedPayMix = card.dataset.desc;
+
+        // Show the visualization only for the 'Balanced' choice for demonstration
+        if (card.dataset.choice === 'Balanced') {
+            payMixVisualization.classList.remove('hidden');
+            renderPayMixChart();
+        } else {
+            payMixVisualization.classList.add('hidden');
+        }
+        
+        payMixSummary.innerHTML = `<strong>Lựa chọn của bạn:</strong> Cấu trúc đãi ngộ ${card.querySelector('h4').innerText} với tỷ trọng là <strong>${selectedPayMix}</strong>.`;
+        payMixSummary.classList.remove('hidden');
+    });
+
+    p4pChoices.addEventListener('change', (e) => {
+        const checkboxes = p4pChoices.querySelectorAll('input[type="checkbox"]:checked');
+        selectedP4p = Array.from(checkboxes).map(cb => `<li>${cb.value}</li>`).join('');
+        
+        if (checkboxes.length > 0) {
+            p4pDemoContainer.classList.remove('hidden');
+            p4pSummary.innerHTML = `<strong>Lựa chọn của bạn:</strong> Hệ thống thưởng sẽ tập trung vào: <ul class="list-disc list-inside mt-2">${selectedP4p}</ul>`;
+            p4pSummary.classList.remove('hidden');
+        } else {
+            p4pDemoContainer.classList.add('hidden');
+            p4pSummary.classList.add('hidden');
+        }
+    });
+
+
+    generateBtn.addEventListener('click', generateStatement);
+    copyBtn.addEventListener('click', copyToClipboard);
+
+    // --- Functions ---
+    function synthesizePhilosophy() {
+        const identity = q1Identity.value.trim();
+        const behaviors = q2Behaviors.value.trim();
+        const strategy = q3Strategy.value.trim();
+
+        if (!identity || !behaviors || !strategy) {
+            alert('Vui lòng trả lời cả 3 câu hỏi để tổng hợp.');
+            return;
+        }
+        const draft = `Tại NextGen Innovations, chúng tôi muốn được biết đến ${identity}. Chúng tôi đặc biệt ghi nhận và tưởng thưởng cho ${behaviors} ${strategy}`;
+        
+        philosophyDraftText.textContent = draft;
+        philosophyDraftOutput.classList.remove('hidden');
+    }
+
+    function generateStatement() {
+        const philosophy = philosophyDraftText.textContent.trim();
+        
+        if (!philosophy) {
+             alert('Vui lòng tổng hợp bản nháp triết lý ở Bước 2 trước.');
+             return;
+        }
+        if (!selectedMarketPosition || !selectedPayMix || selectedP4p.length === 0) {
+            alert('Vui lòng hoàn thành tất cả các lựa chọn ở Bước 3 để tạo tuyên bố.');
+            return;
+        }
+
+        const p4pFinalText = `Hệ thống thưởng của chúng tôi được thiết kế để ghi nhận và tưởng thưởng cho các yếu tố sau: <ul class="list-disc list-inside mt-2">${selectedP4p}</ul>`;
+
+        outputContentDiv.innerHTML = `
+            <div>
+                <h4 class="text-2xl font-bold text-indigo-800 border-b-2 border-orange-400 pb-2 mb-2"><i class="fas fa-scroll mr-2"></i>Triết lý Đãi ngộ</h4>
+                <p class="italic">"${philosophy}"</p>
+            </div>
+            <div>
+                <h4 class="text-2xl font-bold text-indigo-800 border-b-2 border-orange-400 pb-2 mb-2"><i class="fas fa-cogs mr-2"></i>Các Nguyên tắc Chiến lược</h4>
+                <ul class="list-disc list-inside space-y-3 mt-4">
+                    <li><strong>Định vị thị trường:</strong> Chúng tôi chọn chiến lược <strong>${selectedMarketPosition}</strong> để giải quyết các thách thức về thu hút và giữ chân nhân tài.</li>
+                    <li><strong>Cấu trúc đãi ngộ:</strong> Để thúc đẩy tư duy làm chủ, cấu trúc đãi ngộ cho các vị trí chủ chốt sẽ là <strong>${selectedPayMix}</strong>.</li>
+                    <li><strong>Trả lương theo hiệu suất:</strong> ${p4pFinalText}</li>
+                </ul>
+            </div>
+        `;
+
+        finalStatementDiv.classList.remove('hidden');
+        finalStatementDiv.scrollIntoView({ behavior: 'smooth' });
+    }
+    
+    function copyToClipboard() {
+        const textToCopy = outputContentDiv.innerText;
+        navigator.clipboard.writeText(textToCopy).then(() => {
+            copyBtn.innerHTML = '<i class="fas fa-check mr-2"></i>Đã sao chép!';
+            setTimeout(() => {
+                copyBtn.innerHTML = '<i class="fas fa-copy mr-2"></i>Sao chép';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy: ', err);
+            alert('Không thể sao chép nội dung.');
+        });
+    }
+
+    function renderPayMixChart() {
+        const ctx = document.getElementById('payMixChart').getContext('2d');
+        if (payMixChartInstance) {
+            payMixChartInstance.destroy();
+        }
+        payMixChartInstance = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Kỹ sư AI Cao cấp', 'Nhân viên Kinh doanh', 'Nhân viên Hành chính'],
+                datasets: [
+                    { label: 'Lương Cố định', data: [60, 40, 85], backgroundColor: '#5C6BC0' },
+                    { label: 'Thưởng', data: [25, 55, 10], backgroundColor: '#FF9800' },
+                    { label: 'Cổ phiếu (LTI)', data: [15, 5, 5], backgroundColor: '#009688' }
+                ]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: {
+                    legend: { position: 'top' },
+                    title: { display: false },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                if (context.parsed.x !== null) {
+                                    label += context.parsed.x + '%';
+                                }
+                                return label;
+                            }
+                        }
+                    },
+                    datalabels: {
+                        color: 'white',
+                        font: {
+                            weight: 'bold'
+                        },
+                        formatter: (value, context) => {
+                           return value > 5 ? value + '%' : '';
+                        }
+                    }
+                },
+                scales: {
+                    x: { stacked: true, display: false, max: 100 },
+                    y: { stacked: true, ticks: { font: { size: 14 } } }
+                }
+            }
+        });
+    }
+});
+</script>
+
+</body>
+</html>
